@@ -36,21 +36,26 @@ body {
 }
 
 .waterfall {
-  column-count: 4;
-  column-gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 .waterfall-item {
-  break-inside: avoid;
-  margin-bottom: 15px;
+  margin-bottom: 0;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
 }
 
 .waterfall-item:hover {
@@ -60,8 +65,13 @@ body {
 
 .waterfall-item img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
   border-radius: 12px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .waterfall-item::after {
@@ -87,10 +97,14 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.95);
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   z-index: 9999;
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
 .lightbox.active {
@@ -99,78 +113,93 @@ body {
 
 .lightbox-content {
   position: relative;
-  max-width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 70%;
   max-height: 90%;
-  animation: zoomIn 0.3s ease;
-}
-
-@keyframes zoomIn {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
 }
 
 .lightbox-content img {
   max-width: 100%;
   max-height: 90vh;
+  object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 
 .lightbox-close {
-  position: absolute;
-  top: -40px;
-  right: 0;
+  position: fixed;
+  top: 30px;
+  right: 30px;
   color: white;
-  font-size: 2rem;
+  font-size: 2.5rem;
   cursor: pointer;
-  background: rgba(255,255,255,0.1);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s ease;
-}
-
-.lightbox-close:hover {
   background: rgba(255,255,255,0.2);
-}
-
-.lightbox-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  color: white;
-  font-size: 3rem;
-  cursor: pointer;
-  background: rgba(255,255,255,0.1);
   width: 50px;
   height: 50px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,0.3);
+  z-index: 10001;
+  font-family: Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+.lightbox-close:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.lightbox-nav {
+  position: relative;
+  color: white;
+  cursor: pointer;
+  background: rgba(255,255,255,0.25);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
   user-select: none;
+  backdrop-filter: blur(10px);
+  border: 3px solid rgba(255,255,255,0.4);
+  z-index: 10001;
+  flex-shrink: 0;
 }
 
 .lightbox-nav:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.4);
+  transform: scale(1.1);
+  box-shadow: 0 8px 30px rgba(255,255,255,0.3);
+}
+
+.lightbox-nav svg {
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 .lightbox-prev {
-  left: -70px;
+  order: 1;
+}
+
+.lightbox-content {
+  order: 2;
 }
 
 .lightbox-next {
-  right: -70px;
+  order: 3;
+}
+
+@media (max-width: 1200px) {
+  .lightbox-content {
+    max-width: 60%;
+  }
 }
 
 .loading {
@@ -180,16 +209,44 @@ body {
   margin-top: 50px;
 }
 
+.load-more {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.load-more-btn {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: 2px solid rgba(255,255,255,0.3);
+  padding: 12px 40px;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.load-more-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.load-more-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* 响应式 */
 @media (max-width: 1200px) {
   .waterfall {
-    column-count: 3;
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .waterfall {
-    column-count: 2;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .header h1 {
@@ -207,14 +264,14 @@ body {
 
 @media (max-width: 480px) {
   .waterfall {
-    column-count: 1;
+    grid-template-columns: 1fr;
   }
 }
 </style>
 </head>
 <body>
   <div class="header">
-    <h1>✨ 精美壁纸</h1>
+    <h1>✨ 看看壁纸吧</h1>
     <p>点击图片查看大图，左右切换浏览</p>
   </div>
 
@@ -222,51 +279,100 @@ body {
     <div class="loading">加载中...</div>
   </div>
 
+  <div class="load-more" id="load-more-container" style="display: none;">
+    <button class="load-more-btn" id="load-more-btn" onclick="loadMoreImages()">加载更多</button>
+  </div>
+
   <!-- 灯箱 -->
   <div class="lightbox" id="lightbox">
+    <div class="lightbox-close" onclick="closeLightbox()">×</div>
+    <div class="lightbox-prev" onclick="prevImage()">
+      <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </div>
     <div class="lightbox-content">
-      <div class="lightbox-close" onclick="closeLightbox()">×</div>
-      <div class="lightbox-prev" onclick="prevImage()">‹</div>
-      <div class="lightbox-next" onclick="nextImage()">›</div>
       <img id="lightbox-img" src="" alt="壁纸">
+    </div>
+    <div class="lightbox-next" onclick="nextImage()">
+      <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
     </div>
   </div>
 
   <script>
     const imagePath = '../../img/indexbg/';
-    let images = [];
+    let allImages = [];
+    let displayedImages = [];
     let currentIndex = 0;
+    let currentPage = 0;
+    const pageSize = 20; // 每页显示20张
 
-    // 自动扫描图片（1.jpg 到 65.jpg）
-    async function loadImages() {
+    // 初始化：扫描所有图片
+    async function initImages() {
       const waterfall = document.getElementById('waterfall');
-      waterfall.innerHTML = '';
+      waterfall.innerHTML = '<div class="loading">扫描图片中...</div>';
 
-      // 尝试加载图片，从1到100（预留空间）
-      for (let i = 1; i <= 100; i++) {
+      // 扫描所有图片（从100到1，倒序，最新的在前）
+      for (let i = 100; i >= 1; i--) {
         const imgSrc = `${imagePath}${i}.jpg`;
-
-        // 检查图片是否存在
         const exists = await checkImageExists(imgSrc);
         if (exists) {
-          images.push(imgSrc);
-
-          const item = document.createElement('div');
-          item.className = 'waterfall-item';
-          item.onclick = () => openLightbox(images.length - 1);
-
-          const img = document.createElement('img');
-          img.src = imgSrc;
-          img.alt = `壁纸 ${i}`;
-          img.loading = 'lazy';
-
-          item.appendChild(img);
-          waterfall.appendChild(item);
+          allImages.push({ src: imgSrc, index: i });
         }
       }
 
-      if (images.length === 0) {
+      if (allImages.length === 0) {
         waterfall.innerHTML = '<div class="loading">暂无壁纸</div>';
+        return;
+      }
+
+      // 加载第一页
+      loadMoreImages();
+    }
+
+    // 加载更多图片
+    function loadMoreImages() {
+      const waterfall = document.getElementById('waterfall');
+      const loadMoreContainer = document.getElementById('load-more-container');
+      const loadMoreBtn = document.getElementById('load-more-btn');
+
+      // 清除加载提示
+      if (currentPage === 0) {
+        waterfall.innerHTML = '';
+      }
+
+      // 计算当前页的图片
+      const start = currentPage * pageSize;
+      const end = Math.min(start + pageSize, allImages.length);
+      const pageImages = allImages.slice(start, end);
+
+      // 渲染图片
+      pageImages.forEach((imgData, idx) => {
+        const globalIndex = start + idx;
+        displayedImages.push(imgData.src);
+
+        const item = document.createElement('div');
+        item.className = 'waterfall-item';
+        item.onclick = () => openLightbox(globalIndex);
+
+        const img = document.createElement('img');
+        img.src = imgData.src;
+        img.alt = `壁纸 ${imgData.index}`;
+        img.loading = 'lazy';
+
+        item.appendChild(img);
+        waterfall.appendChild(item);
+      });
+
+      currentPage++;
+
+      // 显示/隐藏加载更多按钮
+      if (end >= allImages.length) {
+        loadMoreContainer.style.display = 'none';
+      } else {
+        loadMoreContainer.style.display = 'block';
       }
     }
 
@@ -286,7 +392,7 @@ body {
       const lightbox = document.getElementById('lightbox');
       const lightboxImg = document.getElementById('lightbox-img');
 
-      lightboxImg.src = images[currentIndex];
+      lightboxImg.src = displayedImages[currentIndex];
       lightbox.classList.add('active');
 
       // 阻止背景滚动
@@ -302,14 +408,31 @@ body {
 
     // 上一张
     function prevImage() {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      document.getElementById('lightbox-img').src = images[currentIndex];
+      if (currentIndex > 0) {
+        currentIndex--;
+      } else {
+        // 已经是第一张，循环到最后
+        currentIndex = displayedImages.length - 1;
+      }
+      document.getElementById('lightbox-img').src = displayedImages[currentIndex];
     }
 
     // 下一张
-    function nextImage() {
-      currentIndex = (currentIndex + 1) % images.length;
-      document.getElementById('lightbox-img').src = images[currentIndex];
+    async function nextImage() {
+      if (currentIndex < displayedImages.length - 1) {
+        currentIndex++;
+      } else {
+        // 已经是最后一张，检查是否还有更多图片
+        if (displayedImages.length < allImages.length) {
+          // 还有更多图片，加载下一页
+          loadMoreImages();
+          currentIndex++;
+        } else {
+          // 没有更多了，循环到第一张
+          currentIndex = 0;
+        }
+      }
+      document.getElementById('lightbox-img').src = displayedImages[currentIndex];
     }
 
     // 键盘控制
@@ -329,8 +452,8 @@ body {
       }
     });
 
-    // 加载图片
-    loadImages();
+    // 初始化
+    initImages();
   </script>
 </body>
 </html>
