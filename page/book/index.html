@@ -335,7 +335,7 @@ body {
     }
 
     // 打开阅读器
-    function openReader(epubPath, title) {
+    async function openReader(epubPath, title) {
       const readerContainer = document.getElementById('reader-container');
       const readerTitle = document.getElementById('reader-title');
       const viewer = document.getElementById('viewer');
@@ -345,6 +345,12 @@ body {
       document.body.style.overflow = 'hidden';
 
       // 清空之前的内容
+      if (rendition) {
+        rendition.destroy();
+      }
+      if (currentBook) {
+        currentBook.destroy();
+      }
       viewer.innerHTML = '';
 
       // 加载 epub
@@ -355,9 +361,10 @@ body {
         spread: 'none'
       });
 
-      rendition.display();
+      await rendition.display();
 
       // 键盘翻页
+      document.removeEventListener('keydown', handleKeyPress);
       document.addEventListener('keydown', handleKeyPress);
     }
 
