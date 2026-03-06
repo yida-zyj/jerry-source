@@ -312,7 +312,7 @@ body {
     // 初始化：扫描所有图片
     async function initImages() {
       const waterfall = document.getElementById('waterfall');
-      waterfall.innerHTML = '<div class="loading">扫描图片中...</div>';
+      waterfall.innerHTML = '<div class="loading">加载图片中...</div>';
 
       // 扫描所有图片（从100到1，倒序，最新的在前）
       for (let i = 100; i >= 1; i--) {
